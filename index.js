@@ -30,63 +30,87 @@ app.get('/hello', function(req, res){
 app.post('/ewallet/register', jsonParser, function(req, res){
     var responseObject = {};
     responseObject.status_register = 0;
-    try {
-      if((req.body.user_id && req.body.nama)){
-          sequelize.sync().then(function(){
-            User.create({
-              npm: req.body.user_id,
-              nama: req.body.nama,
-              saldo: 0
-            }).then(function(){
-              responseObject.status_register = 1;
+    checkQuorum().then(function(quorum){
+      if(quorum){
+        if(quorum.successPing / quorum.totalPing <= 0.50){
+          responseObject.status_register = -2;
+          res.send(responseObject);
+        } else {
+          try {
+            if((req.body.user_id && req.body.nama)){
+                sequelize.sync().then(function(){
+                  User.create({
+                    npm: req.body.user_id,
+                    nama: req.body.nama,
+                    saldo: 0
+                  }).then(function(){
+                    responseObject.status_register = 1;
+                    res.status(200).send(responseObject);
+                  }).catch(function(err){
+                    responseObject.status_register = -4;
+                    res.status(200).send(responseObject);
+                  });
+                }).catch(function(err){
+                  responseObject.status_register = -4;
+                  res.status(200).send(responseObject);
+                });
+            } else {
+              responseObject.status_register = -99;
               res.status(200).send(responseObject);
-            }).catch(function(err){
-              responseObject.status_register = -4;
-              res.status(200).send(responseObject);
-            });
-          }).catch(function(err){
-            responseObject.status_register = -4;
-            res.status(200).send(responseObject);
-          });
+            }
+          } catch(e) {
+            console.log(e);
+          }
+        }
       } else {
         responseObject.status_register = -99;
-        res.status(200).send(responseObject);
+        res.send(responseObject);
       }
-    } catch(e) {
-      console.log(e);
-    }
+    });
 });
 
 app.post('/ewallet/getSaldo', jsonParser, function(req, res){
     var responseObject = {};
     responseObject.saldo = 0;
-    try {
-      if((req.body.user_id)){
-          sequelize.sync().then(function(){
-            User.findOne({ where: {npm : req.body.user_id}}).then(function(user){
-              if(user){
-                userData = user.dataValues;
-                responseObject.saldo = userData.saldo;
-                res.send(responseObject);
-              } else {
-                responseObject.saldo = -1;
-                res.send(responseObject);
-              }
-            }).catch(function(err){
-              responseObject.salde = -4;
+    checkQuorum().then(function(quorum){
+      if(quorum){
+        if(quorum.successPing / quorum.totalPing <= 0.50){
+          responseObject.status_register = -2;
+          res.send(responseObject);
+        } else {
+          try {
+            if((req.body.user_id)){
+                sequelize.sync().then(function(){
+                  User.findOne({ where: {npm : req.body.user_id}}).then(function(user){
+                    if(user){
+                      userData = user.dataValues;
+                      responseObject.saldo = userData.saldo;
+                      res.send(responseObject);
+                    } else {
+                      responseObject.saldo = -1;
+                      res.send(responseObject);
+                    }
+                  }).catch(function(err){
+                    responseObject.salde = -4;
+                    res.status(400).send(responseObject);
+                  });
+                }).catch(function(err){
+                  responseObject.saldo = -4;
+                  res.status(400).send(responseObject);
+                });
+            } else {
+              responseObject.saldo = -99;
               res.status(400).send(responseObject);
-            });
-          }).catch(function(err){
-            responseObject.saldo = -4;
-            res.status(400).send(responseObject);
-          });
+            }
+          } catch(e) {
+            console.log(e);
+          }
+        }
       } else {
-        responseObject.saldo = -99;
-        res.status(400).send(responseObject);
+        responseObject.status_register = -99;
+        res.send(responseObject);
       }
-    } catch(e) {
-      console.log(e);
-    }
+    });
 });
 
 app.get('/list', function(req, res){
