@@ -125,7 +125,7 @@ function checkQuorum(){
          }).catch(function (err) {});
          jobs.push(job);
          totalPing+= 1;
-       } else if (pairNpmIp.npm === '1406543813') {
+       } else if (pairNpmIp.npm === '1406543065') {
          options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
          job = rp(options).then(function (body) {
               if(body.pong === 1){
@@ -134,7 +134,7 @@ function checkQuorum(){
          }).catch(function (err) {});
          jobs.push(job);
          totalPing+= 1;
-       } else if (pairNpmIp.npm === '1406543832') {
+       } else if (pairNpmIp.npm === '1406574296') {
          options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
          job = rp(options).then(function (body) {
               if(body.pong === 1){
