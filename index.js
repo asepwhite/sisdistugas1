@@ -38,8 +38,8 @@ app.post('/ewallet/register', jsonParser, function(req, res){
               nama: req.body.nama,
               saldo: 0
             }).then(function(){
-              register.status_register = 1;
-              res.send(responseObject);
+              responseObject.status_register = 1;
+              res.status(200).send(responseObject);
             }).catch(function(err){
               responseObject.status_register = -4;
               res.status(200).send(responseObject);
