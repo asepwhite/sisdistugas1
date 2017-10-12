@@ -147,6 +147,7 @@ function checkQuorum(){
     //  }
      //call self ping
      options.uri = 'http://127.0.0.1:80/ewallet/ping';
+     console.log("haha");	
      job = rp(options).then(function (body) {
           if(body.pong === 1){
             successPing += 1;
@@ -174,6 +175,6 @@ app.get('/ewallet/checkQuorum', function(req, res){
   });
 });
 
-app.listen(3000, function () {
+app.listen(80, function () {
   console.log('App running on port 3000!'+"\n")
 })
