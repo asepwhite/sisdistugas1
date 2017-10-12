@@ -125,7 +125,7 @@ function checkQuorum(){
          }).catch(function (err) {});
          jobs.push(job);
          totalPing+= 1;
-       } else if (pairNpmIp.npm === '1406543065') {
+       } else if (pairNpmIp.npm === '1406543605') {
          options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
          job = rp(options).then(function (body) {
               if(body.pong === 1){
