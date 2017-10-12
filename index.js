@@ -17,15 +17,6 @@ const User = sequelize.define('users', {
   saldo: Sequelize.INTEGER
 });
 
-// app.get('/createUser', function(req, res){
-//   sequelize.sync()
-//   .then(() => User.create({
-//     npm: 1406623064,
-//     nama: 'akbar',
-//     saldo: 0
-//   }))
-// });
-
 app.post('/ewallet/ping', function(req, res){
   responseObject = {};
   responseObject.pong = 1;
@@ -50,16 +41,16 @@ app.post('/ewallet/register', jsonParser, function(req, res){
               register.status_register = 1;
               res.send(responseObject);
             }).catch(function(err){
-              responseObject.status_register = 4;
-              res.status(400).send(responseObject);
+              responseObject.status_register = -4;
+              res.status(200).send(responseObject);
             });
           }).catch(function(err){
-            responseObject.status_register = 4;
-            res.status(400).send(responseObject);
+            responseObject.status_register = -4;
+            res.status(200).send(responseObject);
           });
       } else {
-        responseObject.status_register = 99;
-        res.status(400).send(responseObject);
+        responseObject.status_register = -99;
+        res.status(200).send(responseObject);
       }
     } catch(e) {
       console.log(e);
@@ -68,29 +59,29 @@ app.post('/ewallet/register', jsonParser, function(req, res){
 
 app.post('/ewallet/getSaldo', jsonParser, function(req, res){
     var responseObject = {};
-    responseObject.status_register = 0;
+    responseObject.saldo = 0;
     try {
       if((req.body.user_id)){
           sequelize.sync().then(function(){
-            // Project.findOne({ where: {user_id : 'aProject'} }).then(project => {
-            // })
-            User.create({
-              npm: req.body.user_id,
-              nama: req.body.nama,
-              saldo: 0
-            }).then(function(){
-              register.status_register = 1;
-              res.send(responseObject);
+            User.findOne({ where: {npm : req.body.user_id}}).then(function(user){
+              if(user){
+                userData = user.dataValues;
+                responseObject.saldo = userData.saldo;
+                res.send(responseObject);
+              } else {
+                responseObject.saldo = -1;
+                res.send(responseObject);
+              }
             }).catch(function(err){
-              responseObject.status_register = 4;
+              responseObject.salde = -4;
               res.status(400).send(responseObject);
             });
           }).catch(function(err){
-            responseObject.status_register = 4;
+            responseObject.saldo = -4;
             res.status(400).send(responseObject);
           });
       } else {
-        responseObject.status_register = 99;
+        responseObject.saldo = -99;
         res.status(400).send(responseObject);
       }
     } catch(e) {
@@ -126,7 +117,7 @@ function checkQuorum(){
      for (var index in arrayOfIP) {
        pairNpmIp = arrayOfIP[index];
        if(pairNpmIp.npm === '1406578275'){
-         options.uri = 'http://127.0.0.1:3000/ewallet/ping';
+         options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
          job = rp(options).then(function (body) {
               if(body.pong === 1){
                 successPing += 1;
@@ -135,7 +126,7 @@ function checkQuorum(){
          jobs.push(job);
          totalPing+= 1;
        } else if (pairNpmIp.npm === '1406543813') {
-         options.uri = 'http://127.0.0.1:3000/ewallet/ping';
+         options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
          job = rp(options).then(function (body) {
               if(body.pong === 1){
                 successPing += 1;
@@ -144,7 +135,7 @@ function checkQuorum(){
          jobs.push(job);
          totalPing+= 1;
        } else if (pairNpmIp.npm === '1406543832') {
-         options.uri = 'http://127.0.0.1:3000/ewallet/ping';
+         options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
          job = rp(options).then(function (body) {
               if(body.pong === 1){
                 successPing += 1;
