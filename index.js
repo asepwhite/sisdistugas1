@@ -114,38 +114,39 @@ function checkQuorum(){
    try {
      arrayOfIP = body;
      options.method = 'POST';
-     for (var index in arrayOfIP) {
-       pairNpmIp = arrayOfIP[index];
-       if(pairNpmIp.npm === '1406578275'){
-         options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
-         job = rp(options).then(function (body) {
-              if(body.pong === 1){
-                successPing += 1;
-              }
-         }).catch(function (err) {});
-         jobs.push(job);
-         totalPing+= 1;
-       } else if (pairNpmIp.npm === '1406543813') {
-         options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
-         job = rp(options).then(function (body) {
-              if(body.pong === 1){
-                successPing += 1;
-              }
-         }).catch(function (err) {});
-         jobs.push(job);
-         totalPing+= 1;
-       } else if (pairNpmIp.npm === '1406543832') {
-         options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
-         job = rp(options).then(function (body) {
-              if(body.pong === 1){
-                successPing += 1;
-              }
-         }).catch(function (err) {});
-         jobs.push(job);
-         totalPing+= 1;
-       }
-     }
+    //  for (var index in arrayOfIP) {
+    //    pairNpmIp = arrayOfIP[index];
+    //    if(pairNpmIp.npm === '1406578275'){
+    //      options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
+    //      job = rp(options).then(function (body) {
+    //           if(body.pong === 1){
+    //             successPing += 1;
+    //           }
+    //      }).catch(function (err) {});
+    //      jobs.push(job);
+    //      totalPing+= 1;
+    //    } else if (pairNpmIp.npm === '1406543813') {
+    //      options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
+    //      job = rp(options).then(function (body) {
+    //           if(body.pong === 1){
+    //             successPing += 1;
+    //           }
+    //      }).catch(function (err) {});
+    //      jobs.push(job);
+    //      totalPing+= 1;
+    //    } else if (pairNpmIp.npm === '1406543832') {
+    //      options.uri = 'http://'+pairNpmIp.ip+':80/ewallet/ping';
+    //      job = rp(options).then(function (body) {
+    //           if(body.pong === 1){
+    //             successPing += 1;
+    //           }
+    //      }).catch(function (err) {});
+    //      jobs.push(job);
+    //      totalPing+= 1;
+    //    }
+    //  }
      //call self ping
+     options.uri = 'http://127.0.0.1:80/ewallet/ping';
      job = rp(options).then(function (body) {
           if(body.pong === 1){
             successPing += 1;
